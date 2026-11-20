@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>LISTENERS SURVIVAL // SATELLITE INTELLIGENCE NETWORK</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="stage-globe">
+
+  <!-- ===== WORLD LAYERS ===== -->
+  <div id="globe"></div>
+  <div id="sat-labels"></div>
+
+  <!-- ===== HUD ===== -->
+  <div id="hud">
+    <svg id="hud-rings" viewBox="-500 -500 1000 1000" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+      <circle r="470" class="r-thin" />
+      <circle r="440" class="r-dash spin-a" />
+      <circle r="410" class="r-thin" />
+      <g class="spin-b"><circle r="480" class="r-ticks" /></g>
+      <line x1="-500" y1="0" x2="-380" y2="0" class="r-thin" /><line x1="380" y1="0" x2="500" y2="0" class="r-thin" />
+      <line x1="0" y1="-500" x2="0" y2="-380" class="r-thin" /><line x1="0" y1="380" x2="0" y2="500" class="r-thin" />
+    </svg>
+
+    <header id="top">
+      <div class="brand">
+        <div class="b1">LISTENERS SURVIVAL</div>
+        <div class="b2">SATELLITE INTELLIGENCE NETWORK</div>
+      </div>
+      <div id="top-mid">SATELLITE INTELLIGENCE SYSTEM</div>
+      <div class="classified">
+        <div class="c1">CLASSIFIED</div>
+        <div class="c2">RESTRICTED ACCESS</div>
+      </div>
+    </header>
+
+    <aside id="panel-left" class="side">
+      <div class="side-title">SYSTEM STATUS</div>
+      <dl>
+        <dt>LINK</dt><dd id="st-link" class="warn">STANDBY</dd>
+        <dt>ENCRYPTION</dt><dd>AES-256 / ACTIVE</dd>
+        <dt>CLEARANCE</dt><dd id="st-clear" class="warn">NONE</dd>
+        <dt>OBJECTS</dt><dd id="st-obj">00000</dd>
+        <dt>PACKETS</dt><dd id="st-pkt">0000000</dd>
+        <dt>UTC</dt><dd id="st-utc">--:--:--</dd>
+      </dl>
+      <div class="side-title">ORBITAL TRACK</div>
+      <ul id="orbit-list">
+        <li>SAT-0412 <span>TRACKING</span></li>
+        <li>SAT-1187 <span>TRACKING</span></li>
+        <li>SAT-2203 <span>TRACKING</span></li>
+        <li class="red">UNIDENTIFIED <span>NO ID</span></li>
+      </ul>
+    </aside>
+
+    <aside id="panel-right" class="side">
+      <div class="side-title">SIGNAL</div>
+      <div id="bars"></div>
+      <dl>
+        <dt>CAM LAT</dt><dd id="st-lat">--</dd>
+        <dt>CAM LON</dt><dd id="st-lon">--</dd>
+        <dt>ALT</dt><dd id="st-alt">--</dd>
+        <dt>MODE</dt><dd id="st-mode" class="warn">PASSIVE</dd>
+      </dl>
+      <div class="tiny-block" id="tiny-block"></div>
+    </aside>
+
+    <section id="log-box">
+      <div class="side-title">SYSTEM LOG</div>
+      <div id="log"></div>
+    </section>
+
+    <div id="foot-mid">TOP SECRET // SI // NOFORN &nbsp;|&nbsp; UNAUTHORIZED ACCESS IS A FEDERAL OFFENSE</div>
+    <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+  </div>
+
+  <!-- ===== TERMINAL (authentication) ===== -->
+  <section id="terminal" class="panel">
+    <div class="term-bar"><span>SECURE SATELLITE ACCESS TERMINAL</span><span id="term-id">TERM-07 // NODE A7</span></div>
+    <div id="boot" aria-live="polite"></div>
+
+    <form id="auth" hidden autocomplete="off">
+      <h1>GLOBAL SATELLITE SURVEILLANCE</h1>
+      <p class="sub">IDENTIFY SATELLITE TO ACCESS SURVEILLANCE DATA.</p>
+      <div class="label">SATELLITE IDENTIFICATION</div>
+      <p class="hint">ENTER SATELLITE DESIGNATION TO CONTINUE.</p>
+      <label class="field">
+        <span class="prompt">&gt;</span>
+        <input id="designation" type="text" placeholder="위성 식별 코드 입력"
+               autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="32" aria-label="위성 식별 코드 입력" />
+      </label>
+      <button id="auth-btn" type="submit"><span>[ AUTHENTICATE ]</span></button>
+      <div id="denied" role="alert" hidden>
+        <div class="d1">ACCESS DENIED</div>
+        <div>UNKNOWN SATELLITE DESIGNATION</div>
+        <div>PLEASE VERIFY SATELLITE IDENTIFICATION.</div>
+        <div class="d-count" id="d-count"></div>
+      </div>
+    </form>
+  </section>
+
+  <!-- ===== SEQUENCE MESSAGES ===== -->
+  <section id="seq" class="panel" hidden>
+    <div class="term-bar"><span id="seq-title">WATCHER UPLINK</span><span id="seq-pct">0%</span></div>
+    <div id="seq-lines"></div>
+    <div class="progress"><div id="seq-bar"></div></div>
+    <div id="seq-sub"></div>
+  </section>
+
+  <!-- ===== MAP STAGE HUD ===== -->
+  <div id="map-hud">
+    <div id="map-title">
+      <div class="m1">WATCHER</div>
+      <div class="m2">SATELLITE SURVEILLANCE NETWORK</div>
+      <dl>
+        <dt>STATUS:</dt><dd>ONLINE</dd>
+        <dt>SIGNAL:</dt><dd>ESTABLISHED</dd>
+        <dt>DATA CLASSIFICATION:</dt><dd class="red">TOP SECRET</dd>
+      </dl>
+    </div>
+    <div id="zone-strip"></div>
+  </div>
+
+  <!-- ===== ZONE VIEWER ===== -->
+  <div id="viewer" hidden role="dialog" aria-modal="true" aria-label="Zone reconnaissance photograph">
+    <div class="viewer-box panel">
+      <div class="term-bar"><span id="v-title">ZONE</span><button id="v-close" type="button">[ CLOSE ]</button></div>
+      <div class="viewer-body">
+        <div class="img-frame big loading" id="v-frame">
+          <img id="v-img" alt="Satellite reconnaissance photograph" />
+          <div class="img-noise"></div><div class="img-scan"></div>
+          <div class="img-cross"></div>
+          <div class="img-tag" id="v-imgtag"></div>
+        </div>
+        <div class="viewer-info">
+          <dl id="v-data"></dl>
+          <div class="side-title">ANALYSIS</div>
+          <ul id="v-analysis"></ul>
+          <div class="v-nav"><button type="button" id="v-prev">&lt; PREV ZONE</button><button type="button" id="v-next">NEXT ZONE &gt;</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SCREEN EFFECTS ===== -->
+  <button id="sound-toggle" type="button" aria-pressed="true">SOUND: ON</button>
+  <canvas id="noise"></canvas>
+  <div id="scanlines"></div>
+  <div id="vignette"></div>
+  <div id="flash"></div>
+  <div id="cursor"><i></i></div>
+  <noscript><div style="position:fixed;inset:0;background:#000;color:#3f6;padding:2rem;font-family:monospace">JAVASCRIPT REQUIRED TO ESTABLISH SATELLITE LINK.</div></noscript>
+
+  <script src="js/vendor/three.min.js"></script>
+  <script src="js/textures.js"></script>
+  <script src="js/globe.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
